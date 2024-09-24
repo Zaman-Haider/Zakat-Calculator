@@ -1,0 +1,1626 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Zakat Calculator</title>
+    <style>
+body {
+        font-family: Arial, sans-serif;
+        background-color: #cbcaca;
+        padding: 20px;
+        display: flex;
+      }
+      .container {
+        background-color: white;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        width: 75%;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+      }
+      
+      /* Sidebar container styling */
+.categories {
+  width: 20%; /* Maintain the width */
+  margin-right: 20px; /* Space between the categories and the main content */
+  display: flex;
+  flex-direction: column;
+  height: auto; /* Full height */
+  background-color: #ffffff; /* Clean white background */
+  border-right: 2px solid #dcdcdc; /* Light grey border for subtle separation */
+  padding: 20px; /* Padding around the buttons */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  overflow-y: auto; /* Scrollbar if content overflows */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Modern and professional font */
+}
+
+/* Category button styling */
+.category-button {
+  display: block;
+  /* background: linear-gradient(135deg, #007bff, #0056b3);  */
+  background: #4F8385;
+  color: white; /* White text color */
+  padding: 14px 20px; /* Consistent padding */
+  border: none;
+  border-radius: 6px; /* Slightly rounded corners for a modern look */
+  cursor: pointer;
+  width: 100%; /* Full width */
+  margin-bottom: 12px; /* Space between buttons */
+  text-align: left; /* Align text to the left */
+  font-size: 16px; /* Clear, readable font size */
+  font-weight: 500; /* Slightly bold text */
+  transition: background 0.3s, box-shadow 0.3s, transform 0.3s; /* Smooth transition */
+  position: relative; /* For pseudo-element positioning */
+}
+
+/* Indicator bar styling */
+.category-button::before {
+  content: ''; /* Empty content for pseudo-element */
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 5px; /* Indicator bar width */
+  height: 100%; /* Full height */
+  background-color: #ffffff; /* White indicator color */
+  transform: translateY(-50%); /* Centering the indicator */
+  transition: background-color 0.3s; /* Smooth transition */
+}
+
+/* Hover effect */
+.category-button:hover {
+  /* background: linear-gradient(135deg, #0056b3, #003d7a);  */
+  background: #4F8385;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
+  transform: translateY(-2px); /* Slight lift effect */
+}
+
+/* Active state styling */
+.category-button.active {
+  /* background: linear-gradient(135deg, #003d7a, #001f3f);  */
+  background: #4F8385;
+  color: #e9ecef; /* Light text color for contrast */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Subtle shadow for active state */
+}
+
+/* Disabled state styling */
+.category-button.disabled {
+  background: linear-gradient(135deg, #e0e0e0, #c6c6c6); /* Grey gradient for disabled state */
+  color: #9e9e9e; /* Darker grey text for disabled state */
+  cursor: not-allowed; /* Cursor indicates button is disabled */
+  box-shadow: none; /* Remove shadow for disabled state */
+}
+
+/* Ensure your HTML buttons have 'hover', 'active', and 'disabled' states properly linked */
+
+      h2,
+      h3 {
+        text-align: justify;
+        font-family: cursive
+      }
+
+      p {
+        text-align: justify;
+      }
+      strong {
+        font-weight: 500;
+      }
+      h4 {
+        font-size: xx-large;
+      }
+
+      .form-group {
+        position: relative;
+        margin: 20px 0;
+      }
+
+      input[type="number"],
+      input[type="text"],
+      input[type="date"],
+      select {
+        width: 100%;
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+        background: transparent; /* Ensure background is transparent for floating effect */
+      }
+
+      .select-wrapper {
+        position: relative;
+      }
+
+      label {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        padding: 0 5px;
+        background: white;
+        color: #999;
+        transition: 0.2s;
+        pointer-events: none;
+      }
+
+      input:focus + label,
+      input:not(:placeholder-shown) + label,
+      select:focus + label,
+      select:not(:empty) + label {
+        top: -10px;
+        left: 10px;
+        color:   #4f8385;
+        font-size: 12px;
+        font-weight: bold;
+      }
+
+      input:focus,
+      select:focus {
+        outline: none;
+        border-color: #4f8385;
+      }
+
+      .currency-message {
+        font-size: 14px;
+        color: #666;
+        margin-top: 8px;
+      }
+
+      .continue-button {
+
+        /* background: linear-gradient(135deg, #003d7a, #001f3f); */
+        background: #4F8385;
+        color: white;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        width: 100%;
+        text-align: center;
+        margin-top: auto;
+        bottom: 20px; /* Adjust the distance from the bottom if needed */
+      }
+
+      .continue-button:hover {
+        /* background: linear-gradient(135deg, #076cd1, #142b41); */
+        background: #4F8385;
+      }
+
+      .nisab-section {
+        margin: 20px 0;
+      }
+
+      .toggle-switch {
+        display: flex;
+        align-items: center;
+      }
+
+      .toggle-switch input[type="checkbox"] {
+        appearance: none;
+        width: 40px;
+        height: 20px;
+        background-color: #ccc;
+        border-radius: 10px;
+        position: relative;
+        cursor: pointer;
+        outline: none;
+        transition: background-color 0.2s;
+      }
+
+      .toggle-switch input[type="checkbox"]:checked {
+        /* background: linear-gradient(135deg, #003d7a, #001f3f) */
+        background: #4F8385;
+      }
+
+      .toggle-switch input[type="checkbox"]:checked::before {
+        transform: translateX(20px);
+      }
+
+      .toggle-switch input[type="checkbox"]::before {
+        content: "";
+        width: 18px;
+        height: 18px;
+        background-color: white;
+        border-radius: 50%;
+        position: absolute;
+        top: 1px;
+        left: 1px;
+        transition: transform 0.2s;
+        box-shadow: 0 2px 4px -1px rgba(0,0,0,.2),0 4px 5px 0 rgba(0,0,0,.14),0 1px 10px 0 rgba(0,0,0,.12);
+      }
+
+      .toggle-text {
+        margin-left: 10px;
+        font-size: 16px;
+      }
+      .chart-container {
+            display: none; /* Initially hide the chart */
+            
+            padding: 20px;
+            margin-top: 10px;
+            border-radius: 5px;
+            background-color: #f3e5f5;
+            color: #4a148c;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+        
+        .chart-heading {
+            margin-bottom: 10px;
+            color: #4a148c;
+        }
+        .chart-list {
+            list-style-type: none;
+            padding-left: 10px;
+        }
+        .chart-item {
+            margin-bottom: 8px;
+        }
+        .toggle-button {
+            background-color: #e9e7e7;
+            color: rgb(16, 15, 15);
+            padding: 15px 0; /* Increased padding */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%; /* Full width button */
+            font-size: 18px; /* Increased font size */
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+          }
+        
+        .toggle-button:hover {
+          /* background: linear-gradient(135deg, #003d7a, #001f3f); */
+          background: #4F8385;
+            box-shadow: none;
+            color: white;
+        }
+        #statement {
+    width: 46%; /* Adjust the width to resemble a receipt */
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 0 auto;
+    font-family: 'Courier New', Courier, monospace; /* Use a monospaced font */
+    font-size: 14px; /* Smaller font size for a receipt look */
+    line-height: 1.6;
+}
+
+#statement h2 {
+    text-align: center;
+    font-size: 16px; /* Smaller heading */
+    margin-bottom: 10px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 5px;
+}
+
+#summary, #zakatResult {
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+.continue-button {
+    width: 100%;
+    padding: 10px;
+    /* background-color: #007bff; */
+    background: #4F8385;
+    color: white;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    display: block;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.continue-button:hover {
+    /* background-color: #0056b3; */
+    background: #4F8385;
+}
+/* Style for buttons with specific IDs */
+#initialStartupButton,
+#farmerButton,
+#generateStatementButton {
+  background-color: #4f8385;
+    border: none; /* Remove borders */
+    color: white; /* White text */
+    padding: 10px 20px; /* Add some padding */
+    text-align: center; /* Center the text */
+    text-decoration: none; /* Remove underline */
+    display: inline-block; /* Display as inline-block */
+    font-size: 14px; /* Reduce font size */
+    margin: 10px 5px; /* Add some margin */
+    cursor: pointer; /* Add a pointer cursor on hover */
+    border-radius: 5px; /* Rounded corners */
+}
+
+#initialStartupButton:hover,
+#farmerButton:hover,
+#generateStatementButton:hover {
+  background-color:linear-gradient(135deg, #003d7a, #001f3f);
+
+}
+
+/* Style for input fields */
+
+
+/* Popup styling */
+#popupChart {
+    display: none; /* Initially hidden */
+    position: fixed; /* Stay in place */
+    z-index: 9; /* On top of everything */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+}
+
+#popupContent {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 40%; /* Could be more or less depending on screen size */
+    border-radius: 10px;
+}
+
+/* Close button */
+#closePopup {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+#closePopup:hover,
+#closePopup:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Style for statement fields */
+#statementContainer p {
+    margin: 8px 0; /* Space between statements */
+    line-height: 1.6; /* Increase line height for readability */
+}
+.currency-input {
+  padding-left: 40px; /* Adjust as needed */
+}
+
+.currency-input::before {
+  content: attr(data-currency);
+  position: absolute;
+  left: 10px; /* Adjust as needed */
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.9em; /* Adjust as needed */
+  color: #333; /* Adjust color as needed */
+}
+
+
+
+@media print {
+        body * {
+            visibility: hidden;
+        }
+        #statement, #statement * {
+            visibility: visible;
+        }
+        #statement {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+        }
+    }
+    @media print {
+    body * {
+        visibility: hidden; /* Hide everything else */
+    }
+    #popupContent, #popupContent * {
+        visibility: visible; /* Ensure popup content is visible */
+    }
+    #popupContent {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        background: none; /* Optional: Remove any background color */
+    }
+    #closePopup, #printPopupStatement {
+        display: none; /* Hide the close and print buttons when printing */
+    }
+}
+#printPopupStatement {
+    background-color: #007bff; /* Blue background color */
+    color: #fff; /* White text color */
+    border: none; /* Remove border */
+    border-radius: 4px; /* Rounded corners */
+    padding: 10px 20px; /* Padding */
+    font-size: 16px; /* Font size */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transition */
+  }
+
+  #printPopupStatement:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    transform: scale(1.05); /* Slight zoom effect on hover */
+  }
+
+  #printPopupStatement:focus {
+    outline: none; /* Remove default outline on focus */
+  }
+
+    
+      
+    </style>
+  </head>
+  <body>
+    <div class="categories">
+      <input
+        type="button"
+        id="essentialInfoButton"
+        class="category-button active"
+        data-id="essentialInfo"
+        value="1. Essential Information"
+        onclick="showCategory('essentialInfo')"
+      />
+      <input
+        type="button"
+        id="productionEarningsButton"
+        class="category-button disabled"
+        data-id="productionEarnings"
+        value="2. Production / Earnings"
+      />
+      <input
+        type="button"
+        id="assetsButton"
+        class="category-button disabled"
+        data-id="assets"
+        value="3. Assets"
+      />
+      <input
+        type="button"
+        id="livestockButton"
+        class="category-button disabled"
+        data-id="livestock"
+        value="4. Livestock"
+      />
+      <input
+        type="button"
+        id="creditsDebitsButton"
+        class="category-button disabled"
+        data-id="creditsDebits"
+        value="5. Credits and Debits"
+      />
+      <input
+        type="button"
+        id="statementButton"
+        class="category-button disabled"
+        data-id="statement"
+        value="6. Statement"
+      />
+      <input
+        type="button"
+        id="disbursementPrintButton"
+        class="category-button disabled"
+        data-id="disbursementPrint"
+        value="7. Disbursement & Print"
+      />
+    </div>
+
+    <div class="container" id="essentialInfo">
+      <h2>Essential Information</h2>
+      <form id="essentialInfoForm">
+        <div class="form-group">
+          <input type="text" id="firstName" placeholder=" " required />
+          <label for="firstName">First Name</label>
+        </div>
+        <div class="form-group">
+          <input type="text" id="lastName" placeholder=" " required />
+          <label for="lastName">Last Name</label>
+        </div>
+        <div class="form-group select-wrapper">
+  <select id="currency" required>
+    <option value="" disabled selected>Select Currency</option>
+    <option value="AED">United Arab Emirates Dirham (AED)</option>
+    <option value="AFN">Afghan Afghani (AFN)</option>
+    <option value="ALL">Albanian Lek (ALL)</option>
+    <option value="AMD">Armenian Dram (AMD)</option>
+    <option value="ANG">Netherlands Antillean Guilder (ANG)</option>
+    <option value="AOA">Angolan Kwanza (AOA)</option>
+    <option value="ARS">Argentine Peso (ARS)</option>
+    <option value="AUD">Australian Dollar (AUD)</option>
+    <option value="AWG">Aruban Florin (AWG)</option>
+    <option value="AZN">Azerbaijani Manat (AZN)</option>
+    <option value="BAM">Bosnia and Herzegovina Convertible Mark (BAM)</option>
+    <option value="BBD">Barbadian Dollar (BBD)</option>
+    <option value="BDT">Bangladeshi Taka (BDT)</option>
+    <option value="BGN">Bulgarian Lev (BGN)</option>
+    <option value="BHD">Bahraini Dinar (BHD)</option>
+    <option value="BIF">Burundian Franc (BIF)</option>
+    <option value="BMD">Bermudian Dollar (BMD)</option>
+    <option value="BND">Brunei Dollar (BND)</option>
+    <option value="BOB">Bolivian Boliviano (BOB)</option>
+    <option value="BRL">Brazilian Real (BRL)</option>
+    <option value="BSD">Bahamian Dollar (BSD)</option>
+    <option value="BTN">Bhutanese Ngultrum (BTN)</option>
+    <option value="BWP">Botswanan Pula (BWP)</option>
+    <option value="BYN">Belarusian Ruble (BYN)</option>
+    <option value="BZD">Belize Dollar (BZD)</option>
+    <option value="CAD">Canadian Dollar (CAD)</option>
+    <option value="CDF">Congolese Franc (CDF)</option>
+    <option value="CHF">Swiss Franc (CHF)</option>
+    <option value="CLP">Chilean Peso (CLP)</option>
+    <option value="CNY">Chinese Yuan (CNY)</option>
+    <option value="COP">Colombian Peso (COP)</option>
+    <option value="CRC">Costa Rican Colón (CRC)</option>
+    <option value="CUP">Cuban Peso (CUP)</option>
+    <option value="CVE">Cape Verdean Escudo (CVE)</option>
+    <option value="CZK">Czech Koruna (CZK)</option>
+    <option value="DJF">Djiboutian Franc (DJF)</option>
+    <option value="DKK">Danish Krone (DKK)</option>
+    <option value="DOP">Dominican Peso (DOP)</option>
+    <option value="DZD">Algerian Dinar (DZD)</option>
+    <option value="EGP">Egyptian Pound (EGP)</option>
+    <option value="ERN">Eritrean Nakfa (ERN)</option>
+    <option value="ETB">Ethiopian Birr (ETB)</option>
+    <option value="EUR">Euro (EUR)</option>
+    <option value="FJD">Fijian Dollar (FJD)</option>
+    <option value="FKP">Falkland Islands Pound (FKP)</option>
+    <option value="FOK">Faroese Króna (FOK)</option>
+    <option value="GBP">British Pound Sterling (GBP)</option>
+    <option value="GEL">Georgian Lari (GEL)</option>
+    <option value="GHS">Ghanaian Cedi (GHS)</option>
+    <option value="GIP">Gibraltar Pound (GIP)</option>
+    <option value="GMD">Gambian Dalasi (GMD)</option>
+    <option value="GNF">Guinean Franc (GNF)</option>
+    <option value="GTQ">Guatemalan Quetzal (GTQ)</option>
+    <option value="GYD">Guyanaese Dollar (GYD)</option>
+    <option value="HKD">Hong Kong Dollar (HKD)</option>
+    <option value="HNL">Honduran Lempira (HNL)</option>
+    <option value="HRK">Croatian Kuna (HRK)</option>
+    <option value="HTG">Haitian Gourde (HTG)</option>
+    <option value="HUF">Hungarian Forint (HUF)</option>
+    <option value="IDR">Indonesian Rupiah (IDR)</option>
+    <option value="ILS">Israeli New Shekel (ILS)</option>
+    <option value="INR">Indian Rupee (INR)</option>
+    <option value="IQD">Iraqi Dinar (IQD)</option>
+    <option value="IRR">Iranian Rial (IRR)</option>
+    <option value="ISK">Icelandic Króna (ISK)</option>
+    <option value="JMD">Jamaican Dollar (JMD)</option>
+    <option value="JOD">Jordanian Dinar (JOD)</option>
+    <option value="JPY">Japanese Yen (JPY)</option>
+    <option value="KES">Kenyan Shilling (KES)</option>
+    <option value="KGS">Kyrgystani Som (KGS)</option>
+    <option value="KHR">Cambodian Riel (KHR)</option>
+    <option value="KID">Kiribati Dollar (KID)</option>
+    <option value="KMF">Comorian Franc (KMF)</option>
+    <option value="KRW">South Korean Won (KRW)</option>
+    <option value="KWD">Kuwaiti Dinar (KWD)</option>
+    <option value="KYD">Cayman Islands Dollar (KYD)</option>
+    <option value="KZT">Kazakhstani Tenge (KZT)</option>
+    <option value="LAK">Laotian Kip (LAK)</option>
+    <option value="LBP">Lebanese Pound (LBP)</option>
+    <option value="LKR">Sri Lankan Rupee (LKR)</option>
+    <option value="LRD">Liberian Dollar (LRD)</option>
+    <option value="LSL">Lesotho Loti (LSL)</option>
+    <option value="LYD">Libyan Dinar (LYD)</option>
+    <option value="MAD">Moroccan Dirham (MAD)</option>
+    <option value="MDL">Moldovan Leu (MDL)</option>
+    <option value="MGA">Malagasy Ariary (MGA)</option>
+    <option value="MKD">Macedonian Denar (MKD)</option>
+    <option value="MMK">Myanma Kyat (MMK)</option>
+    <option value="MNT">Mongolian Tugrik (MNT)</option>
+    <option value="MOP">Macanese Pataca (MOP)</option>
+    <option value="MRU">Mauritanian Ouguiya (MRU)</option>
+    <option value="MUR">Mauritian Rupee (MUR)</option>
+    <option value="MVR">Maldivian Rufiyaa (MVR)</option>
+    <option value="MWK">Malawian Kwacha (MWK)</option>
+    <option value="MXN">Mexican Peso (MXN)</option>
+    <option value="MYR">Malaysian Ringgit (MYR)</option>
+    <option value="MZN">Mozambican Metical (MZN)</option>
+    <option value="NAD">Namibian Dollar (NAD)</option>
+    <option value="NGN">Nigerian Naira (NGN)</option>
+    <option value="NIO">Nicaraguan Córdoba (NIO)</option>
+    <option value="NOK">Norwegian Krone (NOK)</option>
+    <option value="NPR">Nepalese Rupee (NPR)</option>
+    <option value="NZD">New Zealand Dollar (NZD)</option>
+    <option value="OMR">Omani Rial (OMR)</option>
+    <option value="PAB">Panamanian Balboa (PAB)</option>
+    <option value="PEN">Peruvian Nuevo Sol (PEN)</option>
+    <option value="PGK">Papua New Guinean Kina (PGK)</option>
+    <option value="PHP">Philippine Peso (PHP)</option>
+    <option value="PKR">Pakistani Rupee (PKR)</option>
+    <option value="PLN">Polish Zloty (PLN)</option>
+    <option value="PYG">Paraguayan Guarani (PYG)</option>
+    <option value="QAR">Qatari Rial (QAR)</option>
+    <option value="RON">Romanian Leu (RON)</option>
+    <option value="RSD">Serbian Dinar (RSD)</option>
+    <option value="RUB">Russian Ruble (RUB)</option>
+    <option value="RWF">Rwandan Franc (RWF)</option>
+    <option value="SAR">Saudi Riyal (SAR)</option>
+    <option value="SBD">Solomon Islands Dollar (SBD)</option>
+    <option value="SCR">Seychellois Rupee (SCR)</option>
+    <option value="SDG">Sudanese Pound (SDG)</option>
+    <option value="SEK">Swedish Krona (SEK)</option>
+    <option value="SGD">Singapore Dollar (SGD)</option>
+    <option value="SHP">Saint Helena Pound (SHP)</option>
+    <option value="SLL">Sierra Leonean Leone (SLL)</option>
+    <option value="SOS">Somali Shilling (SOS)</option>
+    <option value="SRD">Surinamese Dollar (SRD)</option>
+    <option value="SSP">South Sudanese Pound (SSP)</option>
+    <option value="STN">São Tomé and Príncipe Dobra (STN)</option>
+    <option value="SYP">Syrian Pound (SYP)</option>
+    <option value="SZL">Swazi Lilangeni (SZL)</option>
+    <option value="THB">Thai Baht (THB)</option>
+    <option value="TJS">Tajikistani Somoni (TJS)</option>
+    <option value="TMT">Turkmenistani Manat (TMT)</option>
+    <option value="TND">Tunisian Dinar (TND)</option>
+    <option value="TOP">Tongan Paʻanga (TOP)</option>
+    <option value="TRY">Turkish Lira (TRY)</option>
+    <option value="TTD">Trinidad and Tobago Dollar (TTD)</option>
+    <option value="TWD">New Taiwan Dollar (TWD)</option>
+    <option value="TZS">Tanzanian Shilling (TZS)</option>
+    <option value="UAH">Ukrainian Hryvnia (UAH)</option>
+    <option value="UGX">Ugandan Shilling (UGX)</option>
+    <option value="USD">US Dollar (USD)</option>
+    <option value="UYU">Uruguayan Peso (UYU)</option>
+    <option value="UZS">Uzbekistan Som (UZS)</option>
+    <option value="VES">Venezuelan Bolívar Soberano (VES)</option>
+    <option value="VND">Vietnamese Dong (VND)</option>
+    <option value="VUV">Vanuatu Vatu (VUV)</option>
+    <option value="WST">Samoan Tala (WST)</option>
+    <option value="XAF">CFA Franc BEAC (XAF)</option>
+    <option value="XCD">East Caribbean Dollar (XCD)</option>
+    <option value="XOF">CFA Franc BCEAO (XOF)</option>
+    <option value="YER">Yemeni Rial (YER)</option>
+    <option value="ZAR">South African Rand (ZAR)</option>
+    <option value="ZMW">Zambian Kwacha (ZMW)</option>
+  </select>
+
+
+          <label for="currency">Currency</label>
+          <div class="currency-message" id="currencyMessage">
+            Your zakat will be calculated in <span id="selectedCurrency">-</span>.
+          </div>
+        </div>
+        <div class="form-group">
+          <input type="date" id="startDate" required />
+          <label for="startDate">Period Start Date</label>
+        </div>
+        <div class="form-group">
+          <input type="date" id="endDate" required />
+          <label for="endDate">Period End Date</label>
+        </div>
+        <button
+          type="button"
+          class="continue-button"
+          onclick="validateAndProceed()"
+        >
+          Continue
+        </button>
+      </form>
+    </div>
+
+    <div class="container" id="productionEarnings" style="display: none">
+      <h2>Production / Earnings</h2>
+      <button id="initialStartupButton" onclick="showInitialStartupFields()">Initial Startup</button>
+      <button id="farmerButton" onclick="showFarmerFields()">Farmer</button>
+  
+      <!-- Production Category Fields -->
+      <div id="productionCategoryFields">
+          <div id="initialStartupFields" style="display:none;">
+            <div class="form-group">
+              <input type="number" id="initialInvestment"  placeholder="Initial Investment">
+            </div>
+              <div class="form-group">
+                <input type="number" id="monthlyRent" placeholder="Monthly Rent">
+              </div>
+                <div class="form-group">
+                  <input type="number" id="utilities" placeholder="Utilities">
+                </div>
+                <div class="form-group">
+                  <input type="number" id="sales" placeholder="Sales">
+                </div>
+                <div class="form-group">
+                  <input type="number" id="employeesSalary" placeholder="Employees Salary">
+                </div>
+                <div class="form-group">
+                <input type="number" id="governmentIncentives" placeholder="Government Incentives">
+              </div>
+              <div class="form-group">
+              <input type="number" id="supportToCharity" placeholder="Support to Charity">
+            </div>
+          </div>
+          
+          <div id="farmerFields" style="display:none;">
+            <div class="form-group">
+              <input type="number" id="lendingPrice" placeholder="Lending Price of the Land">
+            </div>
+            <div class="form-group">
+              <input type="number" id="rentalEquipment" placeholder="Rental Equipment">
+            </div>
+            <div class="form-group">
+              <input type="number" id="utilitiesFarmer" placeholder="Utilities">
+            </div>
+            <div class="form-group">
+              <input type="number" id="salesFarmer" placeholder="Sales">
+            </div>
+            <div class="form-group">
+              <input type="number" id="equipment" placeholder="Equipment">
+            </div>
+            <div class="form-group">
+              <input type="number" id="employeesSalaryFarmer" placeholder="Employees Salary">
+            </div>
+            <div class="form-group">
+              <input type="number" id="governmentIncentivesFarmer" placeholder="Government Incentives">
+            </div>
+            <div class="form-group">
+              <input type="number" id="seedsAndFertilizers" placeholder="Seeds and Fertilizers">
+            </div>
+            <div class="form-group">
+              <input type="number" id="insurance" placeholder="Insurance">
+            </div>
+          </div>
+      </div>
+  
+      <button id="generateStatementButton" style="display:none;" onclick="generateStatement()">Generate Statement</button>
+
+<!-- Popup for Chart -->
+<div id="popupChart">
+  <div id="popupContent">
+    <span id="closePopup" onclick="closePopup()">&times;</span>
+      <div id="statementContainer">
+          <!-- Your statement content goes here -->
+          <p>Statement content...</p>
+      </div>
+      <button id="printPopupStatement" onclick="printPopupStatement()">Print Statement</button>
+
+  </div>
+</div>
+
+  
+      <form id="productionEarningsForm">
+        <div class="nisab-section">
+          <h3>Nisab</h3>
+          <p>
+            Nisab for production / earnings is the minimum amount below which
+            your state exempts tax or zakat on earnings.
+          </p>
+          <div class="toggle-switch">
+            <input
+              type="checkbox"
+              id="nisabToggle"
+              checked
+              onclick="toggleNisab()"
+            />
+            <span class="toggle-text" id="nisabText"
+              >My total production/Earning are greater than nisab</span
+            >
+          </div>
+        </div>
+        <div id="productionEarningsFields">
+          <div class="form-group">
+            <input
+              type="number"
+              id="agricultureBoth"
+              placeholder=" "
+              required
+            />
+            <label for="agricultureBoth"
+              >Agriculture Income With Both Labor and Investment</label
+            >
+          </div>
+          <div class="form-group">
+            <input
+              type="number"
+              id="agricultureEither"
+              placeholder=" "
+              required
+            />
+            <label for="agricultureEither"
+              >Agriculture Income With Either Labor Or Investment</label
+            >
+          </div>
+          <div class="form-group">
+            <input type="number" id="businessIncome" placeholder=" " required />
+            <label for="businessIncome">Business Income</label>
+          </div>
+          <div class="form-group">
+            <input type="number" id="rentalIncome" placeholder=" " required />
+            <label for="rentalIncome">Rental Income</label>
+          </div>
+          <div class="form-group">
+            <input type="number" id="salaryIncome" placeholder=" " required />
+            <label for="salaryIncome">Salary Income</label>
+          </div>
+          <div class="form-group">
+            <input type="number" id="pension" placeholder=" " required />
+            <label for="pension">Pension</label>
+          </div>
+          <div class="form-group">
+            <input type="number" id="capitalGains" placeholder=" " required />
+            <label for="capitalGains">Capital Gains</label>
+          </div>
+          <div class="form-group">
+            <input type="number" id="otherIncome" placeholder=" " required />
+            <label for="otherIncome">Gifts from God</label>
+          </div>
+        </div>
+        <button
+          type="button"
+          class="continue-button"
+          onclick="showCategory('assets')"
+        >
+          Continue
+        </button>
+      </form>
+    </div>
+
+    <div class="container" id="assets" style="display: none">
+      <h2>Assets</h2>
+      <form id="assetsForm">
+        <div class="nisab-section">
+          <h3>Nisab</h3>
+          <p>
+            Nisab for assets is the minimum amount below which your state
+            exempts tax or zakat on assets.
+          </p>
+          <div class="toggle-switch">
+            <input
+              type="checkbox"
+              id="assetsNisabToggle"
+              checked
+              onclick="toggleAssetsNisab()"
+            />
+            <span class="toggle-text" id="assetsNisabText"
+              >My total assets are greater than nisab</span
+            >
+          </div>
+        </div>
+        <div id="assetsFields">
+          <div class="form-group">
+            <input type="number" id="cash" placeholder=" " required />
+            <label for="cash">Cash</label>
+          </div>
+          <div class="form-group">
+            <input type="number" id="investment" placeholder=" " required />
+            <label for="investment">Investment</label>
+          </div>
+          <div class="form-group">
+            <input
+              type="number"
+              id="businessInventory"
+              placeholder=" "
+              required
+            />
+            <label for="businessInventory">Business Inventory</label>
+          </div>
+          <div class="form-group">
+            <input type="number" id="preciousMetals" placeholder=" " required />
+            <label for="preciousMetals">Precious Metals and Jewelry</label>
+          </div>
+          <div class="form-group">
+            <input type="number" id="realEstate" placeholder=" " required />
+            <label for="realEstate">Real Estate</label>
+          </div>
+          <div class="form-group">
+            <input type="number" id="otherAssets" placeholder=" " required />
+            <label for="otherAssets">Other Assets</label>
+          </div>
+        </div>
+        <button
+          type="button"
+          class="continue-button"
+          onclick="showCategory('livestock')"
+        >
+          Continue
+        </button>
+      </form>
+    </div>
+
+    <div class="container" id="livestock" style="display: none">
+      <h3>Nisab</h3>
+      <p>
+        Nisab for livestock is provided by your state. In the absence of any guidelines from your state, you can use the standard nisab of 5 camels, 30 cows, or 40 goats.
+      </p>
+      <div class="toggle-switch">
+        <input
+          type="checkbox"
+          id="livestockNisabToggle"
+          checked
+          onclick="toggleLivestockNisab()"
+        />
+        <span class="toggle-text" id="livestockNisabText">
+          I own livestock and meet the nisab
+        </span>
+      </div>
+      
+      <div id="livestockFields">
+        <h2>Livestock</h2>
+        
+        <button class="toggle-button" onclick="toggleChart()">Livestock</button>
+        
+        <div class="chart-container" id="chartContainer" style="display: none;">
+          <p><strong>Camels</strong></p>
+          <ul class="chart-list">
+            <li class="chart-item">Count 5-24: 1 she-goat for every 5 camels</li>
+            <li class="chart-item">Count 25-35: 1 one-year-old she-camel; in absence, 1 two-year-old camel</li>
+            <li class="chart-item">Count 36-45: 1 two-year-old she-camel</li>
+            <li class="chart-item">Count 46-60: 1 three-year-old she-camel</li>
+            <li class="chart-item">Count 61-75: 1 four-year-old she-camel</li>
+            <li class="chart-item">Count 76-90: 2 two-year-old she-camels</li>
+            <li class="chart-item">Count 91-120: 2 three-year-old she-camels</li>
+            <li class="chart-item">Count over 120: 1 two-year-old she-camel on every 40 camels and 1 three-year-old she-camel on every 50 camels</li>
+          </ul>
+          <p><strong>Cows</strong></p>
+          <ul class="chart-list">
+            <li class="chart-item">1 one-year-old calf on every 30 cows and 1 two-year-old calf on every 40 cows</li>
+          </ul>
+          <p><strong>Goats</strong></p>
+          <ul class="chart-list">
+            <li class="chart-item">Count 40-120: 1 she-goat</li>
+            <li class="chart-item">Count 121-200: 2 she-goats</li>
+            <li class="chart-item">Count 201-300: 3 she-goats</li>
+            <li class="chart-item">Count over 300: 1 she-goat for every 100 goats</li>
+          </ul>
+        </div>
+    
+        <form id="livestockForm">
+          <div class="form-group">
+            <input type="number" id="livestockCount" placeholder=" " required />
+            <label for="livestockCount">Number of Livestock</label>
+          </div>
+        </form>
+      </div>
+    
+      <button
+        type="button"
+        class="continue-button"
+        id="continueButton"
+        onclick="showCategory('creditsDebits')"
+      >
+        Continue
+      </button>
+    </div>
+    
+    <div class="container" id="creditsDebits" style="display: none">
+      <h2>Credits and Debits</h2>
+      <form id="creditsDebitsForm">
+        <div class="form-group">
+          <input type="number" id="zakatPaid" placeholder=" " required />
+          <label for="zakatPaid">Zakat Paid</label>
+        </div>
+        <div class="form-group">
+          <input type="number" id="taxesPaid" placeholder=" " required />
+          <label for="taxesPaid">Taxes Paid</label>
+        </div>
+        <button
+          type="button"
+          class="continue-button"
+          onclick="showCategory('statement')"
+        >
+          Continue
+        </button>
+      </form>
+    </div>
+
+    <div class="container" id="statement" style="display: none">
+      <h2>Statement</h2>
+      <div id="summary"></div>
+      <div id="zakatResult"></div>
+      <button type="button" class="continue-button" onclick="showCategory('disbursementPrint')">
+        Continue
+      </button>
+    </div>
+    
+
+    <div class="container" id="disbursementPrint" style="display: none">
+      <h2>Disbursement & Print</h2>
+      <p>
+        Here you can print your zakat calculation statement and find information
+        on how to disburse your zakat.
+      </p>
+      <button type="button" class="continue-button" onclick="printStatement()">Print Statement</button>
+    </div>
+
+    <script>
+ // Function to show initial startup fields
+ function showInitialStartupFields() {
+    document.getElementById("initialStartupFields").style.display = "block";
+    document.getElementById("farmerFields").style.display = "none";
+    document.getElementById("generateStatementButton").style.display = "block";
+ }
+ document.getElementById('currency').addEventListener('change', function() {
+  updateCurrencySymbol(this.value);
+});
+
+function updateCurrencySymbol(currency) {
+    const symbols = {
+      AED: 'د.إ',   // United Arab Emirates Dirham
+      AFN: '؋',     // Afghan Afghani
+      ALL: 'L',     // Albanian Lek
+      AMD: '֏',     // Armenian Dram
+      ANG: 'ƒ',     // Netherlands Antillean Guilder
+      AOA: 'Kz',    // Angolan Kwanza
+      ARS: '$',     // Argentine Peso
+      AUD: '$',     // Australian Dollar
+      AWG: 'ƒ',     // Aruban Florin
+      AZN: '₼',     // Azerbaijani Manat
+      BAM: 'KM',    // Bosnia and Herzegovina Convertible Mark
+      BBD: '$',     // Barbadian Dollar
+      BDT: '৳',     // Bangladeshi Taka
+      BGN: 'лв',   // Bulgarian Lev
+      BHD: 'ب.د',   // Bahraini Dinar
+      BIF: 'Fr',    // Burundian Franc
+      BMD: '$',     // Bermudian Dollar
+      BND: '$',     // Brunei Dollar
+      BOB: '$b',    // Bolivian Boliviano
+      BRL: 'R$',    // Brazilian Real
+      BSD: '$',     // Bahamian Dollar
+      BTN: 'Nu.',   // Bhutanese Ngultrum
+      BWP: 'P',     // Botswanan Pula
+      BYN: 'Br',    // Belarusian Ruble
+      BZD: '$',     // Belize Dollar
+      CAD: '$',     // Canadian Dollar
+      CDF: 'Fr',    // Congolese Franc
+      CHF: 'CHF',   // Swiss Franc
+      CLP: '$',     // Chilean Peso
+      CNY: '¥',     // Chinese Yuan
+      COP: '$',     // Colombian Peso
+      CRC: '₡',     // Costa Rican Colón
+      CUP: '$',     // Cuban Peso
+      CVE: '$',     // Cape Verdean Escudo
+      CZK: 'Kč',    // Czech Koruna
+      DJF: 'Fdj',   // Djiboutian Franc
+      DKK: 'kr',    // Danish Krone
+      DOP: '$',     // Dominican Peso
+      DZD: 'د.ج',   // Algerian Dinar
+      EGP: 'ج.م',   // Egyptian Pound
+      ERN: 'Nfk',   // Eritrean Nakfa
+      ETB: 'Br',    // Ethiopian Birr
+      EUR: '€',     // Euro
+      FJD: '$',     // Fijian Dollar
+      FKP: '£',     // Falkland Islands Pound
+      FOK: 'kr',    // Faroese Króna
+      GBP: '£',     // British Pound Sterling
+      GEL: '₾',     // Georgian Lari
+      GHS: '₵',     // Ghanaian Cedi
+      GIP: '£',     // Gibraltar Pound
+      GMD: 'D',     // Gambian Dalasi
+      GNF: 'Fr',    // Guinean Franc
+      GTQ: 'Q',     // Guatemalan Quetzal
+      GYD: '$',     // Guyanaese Dollar
+      HKD: '$',     // Hong Kong Dollar
+      HNL: 'L',     // Honduran Lempira
+      HRK: 'kn',    // Croatian Kuna
+      HTG: 'G',     // Haitian Gourde
+      HUF: 'Ft',    // Hungarian Forint
+      IDR: 'Rp',    // Indonesian Rupiah
+      ILS: '₪',     // Israeli New Shekel
+      INR: '₹',     // Indian Rupee
+      IQD: 'ع.د',   // Iraqi Dinar
+      IRR: '﷼',     // Iranian Rial
+      ISK: 'kr',    // Icelandic Króna
+      JMD: '$',     // Jamaican Dollar
+      JOD: 'د.ا',   // Jordanian Dinar
+      JPY: '¥',     // Japanese Yen
+      KES: 'KSh',   // Kenyan Shilling
+      KGS: 'лв',   // Kyrgystani Som
+      KHR: '៛',     // Cambodian Riel
+      KID: '$',     // Kiribati Dollar
+      KMF: 'Fr',    // Comorian Franc
+      KRW: '₩',     // South Korean Won
+      KWD: 'د.ك',   // Kuwaiti Dinar
+      KYD: '$',     // Cayman Islands Dollar
+      KZT: '₸',     // Kazakhstani Tenge
+      LAK: '₭',     // Laotian Kip
+      LBP: 'ل.ل',   // Lebanese Pound
+      LKR: 'Rs',    // Sri Lankan Rupee
+      LRD: '$',     // Liberian Dollar
+      LSL: 'L',     // Lesotho Loti
+      LYD: 'ل.د',   // Libyan Dinar
+      MAD: 'د.م.',  // Moroccan Dirham
+      MDL: 'L',     // Moldovan Leu
+      MGA: 'Ar',    // Malagasy Ariary
+      MKD: 'ден',   // Macedonian Denar
+      MMK: 'Ks',    // Myanma Kyat
+      MNT: '₮',     // Mongolian Tugrik
+      MOP: 'MOP$',  // Macanese Pataca
+      MRU: 'UM',    // Mauritanian Ouguiya
+      MUR: 'Rs',    // Mauritian Rupee
+      MVR: 'Rf',    // Maldivian Rufiyaa
+      MWK: 'MK',    // Malawian Kwacha
+      MXN: '$',     // Mexican Peso
+      MYR: 'RM',    // Malaysian Ringgit
+      MZN: 'MT',    // Mozambican Metical
+      NAD: '$',     // Namibian Dollar
+      NGN: '₦',     // Nigerian Naira
+      NIO: 'C$',    // Nicaraguan Córdoba
+      NOK: 'kr',    // Norwegian Krone
+      NPR: 'Rs',    // Nepalese Rupee
+      NZD: '$',     // New Zealand Dollar
+      OMR: 'ر.ع.',  // Omani Rial
+      PAB: 'B/.',   // Panamanian Balboa
+      PEN: 'S/.',   // Peruvian Nuevo Sol
+      PGK: 'K',     // Papua New Guinean Kina
+      PHP: '₱',     // Philippine Peso
+      PKR: '₨',     // Pakistani Rupee
+      PLN: 'zł',    // Polish Zloty
+      PYG: 'Gs',    // Paraguayan Guarani
+      QAR: 'ر.ق',   // Qatari Rial
+      RON: 'lei',   // Romanian Leu
+      RSD: 'Дин.',  // Serbian Dinar
+      RUB: '₽',     // Russian Ruble
+      RWF: 'Fr',    // Rwandan Franc
+      SAR: 'ر.س',   // Saudi Riyal
+      SBD: '$',     // Solomon Islands Dollar
+      SCR: '₨',     // Seychellois Rupee
+      SDG: 'ج.س.',  // Sudanese Pound
+      SEK: 'kr',    // Swedish Krona
+      SGD: '$',     // Singapore Dollar
+      SHP: '£',     // Saint Helena Pound
+      SLL: 'Le',    // Sierra Leonean Leone
+      SOS: 'Sh',    // Somali Shilling
+      SRD: '$',     // Surinamese Dollar
+      SSP: '£',     // South Sudanese Pound
+      STN: 'Db',    // São Tomé and Príncipe Dobra
+      SVC: '$',     // Salvadoran Colón
+      SYP: 'ل.س',   // Syrian Pound
+      SZL: 'E',     // Swazi Lilangeni
+      THB: '฿',     // Thai Baht
+      TJS: 'SM',    // Tajikistani Somoni
+      TMT: 'T',     // Turkmenistani Manat
+      TND: 'د.ت',   // Tunisian Dinar
+      TOP: 'T$',    // Tongan Paʻanga
+      TRY: '₺',     // Turkish Lira
+      TTD: '$',     // Trinidad and Tobago Dollar
+      TWD: 'NT$',   // New Taiwan Dollar
+      TZS: 'Sh',    // Tanzanian Shilling
+      UAH: '₴',     // Ukrainian Hryvnia
+      UGX: 'Sh',    // Ugandan Shilling
+      USD: '$',     // US Dollar
+      UYU: '$U',    // Uruguayan Peso
+      UZS: 'лв',   // Uzbekistan Som
+      VES: 'Bs.',   // Venezuelan Bolívar Soberano
+      VND: '₫',     // Vietnamese Dong
+      VUV: 'Vt',    // Vanuatu Vatu
+      WST: 'T',     // Samoan Tala
+      XAF: 'Fr',    // CFA Franc BEAC
+      XCD: '$',     // East Caribbean Dollar
+      XOF: 'Fr',    // CFA Franc BCEAO
+      YER: '﷼',     // Yemeni Rial
+      ZAR: 'R',     // South African Rand
+      ZMW: 'ZK',    // Zambian Kwacha
+    };
+    
+    return symbols[currency] || '-';
+  }        document.getElementById('currency').addEventListener('change', function () {
+          const selectedCurrency = this.value;
+          const currencySymbol = updateCurrencySymbol(selectedCurrency);
+          document.getElementById('selectedCurrency').innerText = currencySymbol;
+        });
+window.onload = function() {
+  const selectedCurrency = document.getElementById('currency').value;
+  updateCurrencySymbol(selectedCurrency);
+};
+// Show Farmer Fields and Show Statement Button
+function showFarmerFields() {
+    document.getElementById("initialStartupFields").style.display = "none";
+    document.getElementById("farmerFields").style.display = "block";
+    document.getElementById("generateStatementButton").style.display = "block";
+}
+
+// Function to generate and display statement
+function generateStatement() {
+    // Get all the relevant values for calculations
+    const initialInvestment = parseFloat(document.getElementById("initialInvestment")?.value) || 0;
+    const monthlyRent = parseFloat(document.getElementById("monthlyRent")?.value) || 0;
+    const utilities = parseFloat(document.getElementById("utilities")?.value) || parseFloat(document.getElementById("utilitiesFarmer")?.value) || 0;
+    const sales = parseFloat(document.getElementById("sales")?.value) || parseFloat(document.getElementById("salesFarmer")?.value) || 0;
+    const employeesSalary = parseFloat(document.getElementById("employeesSalary")?.value) || parseFloat(document.getElementById("employeesSalaryFarmer")?.value) || 0;
+    const governmentIncentives = parseFloat(document.getElementById("governmentIncentives")?.value) || parseFloat(document.getElementById("governmentIncentivesFarmer")?.value) || 0;
+    const supportToCharity = parseFloat(document.getElementById("supportToCharity")?.value) || 0;
+    const lendingPrice = parseFloat(document.getElementById("lendingPrice")?.value) || 0;
+    const rentalEquipment = parseFloat(document.getElementById("rentalEquipment")?.value) || 0;
+    const seedsAndFertilizers = parseFloat(document.getElementById("seedsAndFertilizers")?.value) || 0;
+    const insurance = parseFloat(document.getElementById("insurance")?.value) || 0;
+
+    // Category-wise calculations
+    const rawMaterialTotal = initialInvestment + seedsAndFertilizers;
+    const meansOfProductionTotal = monthlyRent + utilities + employeesSalary + rentalEquipment + insurance;
+    const revenueTotal = sales + governmentIncentives + supportToCharity;
+
+    // Zakat calculations based on Ghamidi's principles
+    const zakatRawMaterial = rawMaterialTotal * 0.05; // 5% zakat
+    const zakatMeansOfProduction = meansOfProductionTotal * 0.05; // 5% zakat
+    const zakatRevenue = (sales * 0.10) + (governmentIncentives * 0.05) + (supportToCharity * 0.20); // 10%, 5%, 20%
+
+    // Total Zakat
+    const totalZakat = zakatRawMaterial + zakatMeansOfProduction + zakatRevenue;
+
+    // Generate the statement with detailed calculations
+    const statement = `
+        <h3>Statement Summary</h3>
+        <p><strong>Raw Material Total:</strong> ${rawMaterialTotal.toFixed(2)}</p>
+        <p><strong>Zakat on Raw Material (5%):</strong> ${zakatRawMaterial.toFixed(2)}</p>
+        <p><strong>Means of Production Total:</strong> ${meansOfProductionTotal.toFixed(2)}</p>
+        <p><strong>Zakat on Means of Production (5%):</strong> ${zakatMeansOfProduction.toFixed(2)}</p>
+        <p><strong>Revenue Total:</strong> ${revenueTotal.toFixed(2)}</p>
+        <p><strong>Zakat on Sales (10%):</strong> ${(sales * 0.10).toFixed(2)}</p>
+        <p><strong>Zakat on Government Incentives (5%):</strong> ${(governmentIncentives * 0.05).toFixed(2)}</p>
+        <p><strong>Zakat on Support to Charity (20%):</strong> ${(supportToCharity * 0.20).toFixed(2)}</p>
+        <h4>Total Zakat: ${totalZakat.toFixed(2)}</h4>
+    `;
+
+    // Display the statement in a popup
+    document.getElementById("statementContainer").innerHTML = statement;
+    document.getElementById("popupChart").style.display = "block";
+}
+
+function closePopup() {
+    document.getElementById("popupChart").style.display = "none";
+}
+function printPopupStatement() {
+    window.print();
+}
+
+
+
+
+       function toggleChart() {
+            var chart = document.querySelector(".chart-container");
+            if (chart.style.display === "none") {
+                chart.style.display = "block";
+            } else {
+                chart.style.display = "none";
+            }
+        }
+      function showCategory(categoryId) {
+  const categories = document.querySelectorAll(".container");
+  categories.forEach((category) => {
+    category.style.display = "none";
+  });
+
+  document.getElementById(categoryId).style.display = "flex";
+
+  // Automatically generate summary and show continue button when in 'Statement' category
+  if (categoryId === "statement") {
+    updateStatement(); // Generate the summary and zakat result
+    document.getElementById("continueButton").style.display = "block"; // Show the continue button
+  }
+
+  // Enable the next category button
+  const nextButton = document.querySelector(`.category-button[data-id="${categoryId}"]`);
+  if (nextButton) {
+    nextButton.classList.remove("disabled")
+    nextButton.classList.add("active");
+  }
+}
+
+
+      function validateAndProceed() {
+        const essentialInfoForm = document.getElementById("essentialInfoForm");
+        if (essentialInfoForm.checkValidity()) {
+          showCategory("productionEarnings");
+        } else {
+          alert("Please fill out all required fields.");
+        }
+      }
+
+      function calculateZakat() {
+    const formData = {
+        agricultureBoth: parseFloat(document.getElementById("agricultureBoth").value) || 0,
+        agricultureEither: parseFloat(document.getElementById("agricultureEither").value) || 0,
+        salariesWages: parseFloat(document.getElementById("salaryIncome").value) || 0,
+        pension: parseFloat(document.getElementById("pension").value) || 0,
+        capitalGains: parseFloat(document.getElementById("capitalGains").value) || 0,
+        rentalIncome: parseFloat(document.getElementById("rentalIncome").value) || 0,
+        businessIncome: parseFloat(document.getElementById("businessIncome").value) || 0,
+        giftsFromGod: parseFloat(document.getElementById("otherIncome").value) || 0,
+        cash: parseFloat(document.getElementById("cash").value) || 0,
+        investment: parseFloat(document.getElementById("investment").value) || 0,
+        businessInventory: parseFloat(document.getElementById("businessInventory").value) || 0,
+        preciousMetals: parseFloat(document.getElementById("preciousMetals").value) || 0,
+        realEstate: parseFloat(document.getElementById("realEstate").value) || 0,
+        otherAssets: parseFloat(document.getElementById("otherAssets").value) || 0,
+        livestockCount: parseFloat(document.getElementById("livestockCount").value) || 0,
+        taxesPaid: parseFloat(document.getElementById("taxesPaid").value) || 0,
+        zakatPaid: parseFloat(document.getElementById("zakatPaid").value) || 0,
+    };
+
+    // Calculate Zakat on Earnings (Production)
+    let totalEarnings = formData.agricultureBoth +
+        formData.agricultureEither +
+        formData.salariesWages +
+        formData.pension +
+        formData.capitalGains +
+        formData.rentalIncome +
+        formData.businessIncome +
+        formData.giftsFromGod;
+
+    let zakatEarnings = formData.agricultureBoth * 0.05 +
+        formData.agricultureEither * 0.10 +
+        formData.salariesWages * 0.10 +
+        formData.pension * 0.10 +
+        formData.capitalGains * 0.10 +
+        formData.rentalIncome * 0.10 +
+        formData.businessIncome * 0.05 +
+        formData.giftsFromGod * 0.20;
+
+    // Calculate Zakat on Assets
+    let totalAssets = formData.cash +
+        formData.investment +
+        formData.businessInventory +
+        formData.preciousMetals +
+        formData.realEstate +
+        formData.otherAssets;
+
+    let zakatAssets = totalAssets * 0.025;
+
+    // Zakat on Livestock (Example calculation)
+    let zakatLivestock = 0;
+        if (formData.livestockCount > 0) {
+          // Add livestock zakat calculation logic based on specific chart
+          zakatLivestock = formData.livestockCount ; // Example rate, should be replaced with actual rates
+        }
+
+    // Total Zakat Before Debits/Credits
+    let totalZakatBeforeCredits = zakatEarnings + zakatAssets + zakatLivestock;
+
+    // Apply Credits and Debits (Taxes Paid and Zakat Paid)
+    let totalZakat = totalZakatBeforeCredits - formData.taxesPaid - formData.zakatPaid;
+
+    // Ensure Zakat doesn't go negative
+    if (totalZakat < 0) {
+        totalZakat = 0;
+    }
+
+    return {
+        totalEarnings,
+        zakatEarnings,
+        totalAssets,
+        zakatAssets,
+        totalLivestock: formData.livestockCount,
+        zakatLivestock,
+        totalZakatBeforeCredits, // Added this for clarity in display
+        totalZakat, // Final Zakat amount after debits and credits
+    };
+}
+
+
+      function updateStatement() {
+        const result = calculateZakat();
+
+        // Gather data for each section
+        const essentialInfo = {
+          firstName: document.getElementById("firstName").value,
+          lastName: document.getElementById("lastName").value,
+          currency: document.getElementById("currency").value,
+          periodStartDate: document.getElementById("startDate").value,
+          periodEndDate: document.getElementById("endDate").value,
+        };
+
+        const productionEarnings = {
+          agricultureBoth:
+            parseFloat(document.getElementById("agricultureBoth").value) || 0,
+          agricultureEither:
+            parseFloat(document.getElementById("agricultureEither").value) || 0,
+          businessIncome:
+            parseFloat(document.getElementById("businessIncome").value) || 0,
+          rentalIncome:
+            parseFloat(document.getElementById("rentalIncome").value) || 0,
+          salaryIncome:
+            parseFloat(document.getElementById("salaryIncome").value) || 0,
+          pension: parseFloat(document.getElementById("pension").value) || 0,
+          capitalGains:
+            parseFloat(document.getElementById("capitalGains").value) || 0,
+          otherIncome:
+            parseFloat(document.getElementById("otherIncome").value) || 0,
+        };
+
+        const assets = {
+          cash: parseFloat(document.getElementById("cash").value) || 0,
+          investment:
+            parseFloat(document.getElementById("investment").value) || 0,
+          businessInventory:
+            parseFloat(document.getElementById("businessInventory").value) || 0,
+          preciousMetals:
+            parseFloat(document.getElementById("preciousMetals").value) || 0,
+          realEstate:
+            parseFloat(document.getElementById("realEstate").value) || 0,
+          otherAssets:
+            parseFloat(document.getElementById("otherAssets").value) || 0,
+        };
+
+        const livestock = {
+          livestockCount:
+            parseFloat(document.getElementById("livestockCount").value) || 0,
+        };
+
+        const creditsDebits = {
+          taxesPaid:
+            parseFloat(document.getElementById("taxesPaid").value) || 0,
+          zakatPaid:
+            parseFloat(document.getElementById("zakatPaid").value) || 0,
+        };
+
+        // Calculate subtotals
+        const subtotalProductionEarnings = Object.values(
+          productionEarnings
+        ).reduce((a, b) => a + b, 0);
+        const subtotalAssets = Object.values(assets).reduce((a, b) => a + b, 0);
+
+        // Display summary of inputs
+        document.getElementById("summary").innerHTML = `
+        <h3>Summary of Inputs</h3>
+        <p><strong>First Name:</strong> ${essentialInfo.firstName}</p>
+        <p><strong>Last Name:</strong> ${essentialInfo.lastName}</p>
+        <p><strong>Currency:</strong> ${essentialInfo.currency}</p>
+        <p><strong>Period Start Date:</strong> ${
+          essentialInfo.periodStartDate
+        }</p>
+        <p><strong>Period End Date:</strong> ${essentialInfo.periodEndDate}</p>
+        
+        <h3>Production / Earnings</h3>
+        <p><strong>Agriculture Income With Both Labor and Investment:</strong> ${productionEarnings.agricultureBoth.toFixed(
+          2
+        )}</p>
+        <p><strong>Agriculture Income With Either Labor Or Investment:</strong> ${productionEarnings.agricultureEither.toFixed(
+          2
+        )}</p>
+        <p><strong>Business Income:</strong> ${productionEarnings.businessIncome.toFixed(
+          2
+        )}</p>
+        <p><strong>Rental Income:</strong> ${productionEarnings.rentalIncome.toFixed(
+          2
+        )}</p>
+        <p><strong>Salary Income:</strong> ${productionEarnings.salaryIncome.toFixed(
+          2
+        )}</p>
+        <p><strong>Pension:</strong> ${productionEarnings.pension.toFixed(
+          2
+        )}</p>
+        <p><strong>Capital Gains:</strong> ${productionEarnings.capitalGains.toFixed(
+          2
+        )}</p>
+        <p><strong>Gifts from God:</strong> ${productionEarnings.otherIncome.toFixed(
+          2
+        )}</p>
+        <p><strong><em>Subtotal Production / Earnings:</em></strong> ${subtotalProductionEarnings.toFixed(
+          2
+        )}</p>
+        
+        <h3>Assets</h3>
+        <p><strong>Cash:</strong> ${assets.cash.toFixed(2)}</p>
+        <p><strong>Investment:</strong> ${assets.investment.toFixed(2)}</p>
+        <p><strong>Business Inventory:</strong> ${assets.businessInventory.toFixed(
+          2
+        )}</p>
+        <p><strong>Precious Metals and Jewelry:</strong> ${assets.preciousMetals.toFixed(
+          2
+        )}</p>
+        <p><strong>Real Estate:</strong> ${assets.realEstate.toFixed(2)}</p>
+        <p><strong>Other Assets:</strong> ${assets.otherAssets.toFixed(2)}</p>
+        <p><strong><em>Subtotal Assets:</em></strong> ${subtotalAssets.toFixed(
+          2
+        )}</p>
+        
+        <h3>Livestock</h3>
+        <p><strong>Number of Livestock:</strong> ${livestock.livestockCount}</p>
+        
+        <h3>Credits and Debits</h3>
+        <p><strong>Taxes Paid:</strong> ${creditsDebits.taxesPaid.toFixed(
+          2
+        )}</p>
+        <p><strong>Zakat Paid:</strong> ${creditsDebits.zakatPaid.toFixed(
+          2
+        )}</p>
+    `;
+
+        // Display zakat calculations
+        document.getElementById("zakatResult").innerHTML = `
+        <h3>Zakat Calculations</h3>
+        <p><strong>Total Earnings:</strong> ${result.totalEarnings.toFixed(
+          2
+        )}</p>
+        <p><strong>Zakat on Earnings:</strong> ${result.zakatEarnings.toFixed(
+          2
+        )}</p>
+        <p><strong>Total Assets:</strong> ${result.totalAssets.toFixed(2)}</p>
+        <p><strong>Zakat on Assets:</strong> ${result.zakatAssets.toFixed(
+          2
+        )}</p>
+        <p><strong>Total Livestock:</strong> ${result.totalLivestock}</p>
+        <p><strong>Zakat on Livestock:</strong> ${result.zakatLivestock.toFixed(
+          2
+        )}</p>
+        <p><strong>Total Zakat Due:</strong> ${result.totalZakat.toFixed(2)}</p>
+    `;
+      }
+      // Set default date to today
+      const today = new Date().toISOString().split("T")[0];
+      document.getElementById("startDate").value = today;
+      document.getElementById("endDate").value = today;
+
+      function toggleNisab() {
+        const nisabToggle = document.getElementById("nisabToggle");
+        const nisabText = document.getElementById("nisabText");
+        const productionEarningsFields = document.getElementById(
+          "productionEarningsFields"
+        );
+        if (nisabToggle.checked) {
+          nisabText.textContent =
+            "My total production/Earnings are greater than nisab";
+          productionEarningsFields.style.display = "block";
+        } else {
+          nisabText.textContent =
+            "My total production/Earnings are less than nisab";
+          productionEarningsFields.style.display = "none";
+        }
+      }
+      function toggleLivestockNisab() {
+  const livestockNisabToggle = document.getElementById("livestockNisabToggle");
+  const livestockNisabText = document.getElementById("livestockNisabText");
+  const livestockFields = document.getElementById("livestockFields");
+
+  if (livestockNisabToggle.checked) {
+    livestockNisabText.textContent = "I own livestock and meet the nisab";
+    livestockFields.style.display = "block";
+  } else {
+    livestockNisabText.textContent = "I don't own livestock or don't meet the nisab";
+    livestockFields.style.display = "none";
+  }
+}
+
+function toggleChart() {
+  const chartContainer = document.getElementById("chartContainer");
+  if (chartContainer.style.display === "none") {
+    chartContainer.style.display = "block";
+  } else {
+    chartContainer.style.display = "none";
+  }
+}
+
+      toggleNisab(); // Initial call to set the correct state
+      function toggleAssetsNisab() {
+        const assetsNisabToggle = document.getElementById("assetsNisabToggle");
+        const assetsNisabText = document.getElementById("assetsNisabText");
+        const assetsFields = document.getElementById("assetsFields");
+        if (assetsNisabToggle.checked) {
+          assetsNisabText.textContent =
+            "My total assets are greater than nisab";
+          assetsFields.style.display = "block";
+        } else {
+          assetsNisabText.textContent = "My total assets are less than nisab";
+          assetsFields.style.display = "none";
+        }
+      }
+
+      toggleAssetsNisab(); // Initialize on page load
+      function printStatement() {
+    // Hide all containers except the statement
+    const containers = document.querySelectorAll(".container");
+    containers.forEach((container) => {
+        container.style.display = "none";
+    });
+
+    // Display only the statement container
+    const statementContainer = document.getElementById("statement");
+    statementContainer.style.display = "block";
+
+    // Print the statement
+    window.print();
+
+    // After print, hide the statement container again if necessary
+    statementContainer.style.display = "none";
+    document.getElementById("disbursementPrint").style.display = "flex";
+}
+      
+    </script>
+  </body>
+</html>
